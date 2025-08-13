@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Book Fair Registration Form</title>
+  <style>
+    :root {
+      --bg: #f9fafb;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --brand1: #8b5cf6;
+      --brand2: #ec4899;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--brand1), var(--brand2));
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+      animation: fadeInDown 0.8s ease;
+    }
+    header p {
+      margin-top: 8px;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .wrap {
+      max-width: 800px;
+      margin: -40px auto 40px;
+      padding: 0 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.6s ease;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--brand1);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .full { grid-column: 1 / -1; }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin: 8px 0 6px;
+      font-weight: 600;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      font: inherit;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--brand1);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .genre {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+    }
+    .genre label {
+      background: #f3f4f6;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+    .genre input {
+      accent-color: var(--brand1);
+    }
+    .genre label:hover {
+      background: rgba(139, 92, 246, 0.15);
+    }
+
+    .btn {
+      margin-top: 20px;
+      background: linear-gradient(135deg, var(--brand1), var(--brand2));
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    #msg {
+      margin-top: 12px;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
+    @keyframes fadeInDown { from {opacity: 0; transform: translateY(-10px);} to {opacity: 1; transform: translateY(0);} }
+    @keyframes fadeInUp { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
+
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Book Fair 2025</h1>
+  <p>Register now & explore a world of stories!</p>
+</header>
+
+<div class="wrap">
+  <div class="card">
+    <h2>Registration Form</h2>
+    <form id="bookFairForm" onsubmit="handleSubmit(event)">
+      <div class="grid">
+        <div>
+          <label for="name">Full Name *</label>
+          <input id="name" name="name" type="text" required placeholder="e.g., Aditi Sharma" />
+        </div>
+
+        <div>
+          <label for="age">Age *</label>
+          <input id="age" name="age" type="number" min="5" max="120" required placeholder="e.g., 19" />
+        </div>
+
+        <div>
+          <label for="contact">Contact Number *</label>
+          <input id="contact" name="contact" type="tel" pattern="[0-9]{10}" required placeholder="9876543210" />
+          <div class="note">10-digit mobile number</div>
+        </div>
+
+        <div>
+          <label for="email">Email *</label>
+          <input id="email" name="email" type="email" required placeholder="you@example.com" />
+        </div>
+
+        <div class="full">
+          <label for="address">Address *</label>
+          <textarea id="address" name="address" required placeholder="House/Hostel, Street, City, PIN"></textarea>
+        </div>
+
+        <div class="full">
+          <label>Book Genres You Like *</label>
+          <div class="genre">
+            <label><input type="checkbox" name="genres" value="Fiction"> Fiction</label>
+            <label><input type="checkbox" name="genres" value="Non-fiction"> Non-fiction</label>
+            <label><input type="checkbox" name="genres" value="Sci-Fi"> Sci-Fi</label>
+            <label><input type="checkbox" name="genres" value="Fantasy"> Fantasy</label>
+            <label><input type="checkbox" name="genres" value="Mystery"> Mystery</label>
+            <label><input type="checkbox" name="genres" value="Romance"> Romance</label>
+            <label><input type="checkbox" name="genres" value="Self-Help"> Self-Help</label>
+            <label><input type="checkbox" name="genres" value="Comics"> Comics</label>
+            <label><input type="checkbox" name="genres" value="Educational"> Educational</label>
+          </div>
+        </div>
+
+        <div class="full">
+          <label for="notes">Any specific authors/titles?</label>
+          <textarea id="notes" name="notes" placeholder="Optional"></textarea>
+        </div>
+      </div>
+
+      <button class="btn" type="submit">Submit Registration</button>
+      <div id="msg"></div>
+    </form>
+  </div>
+</div>
+
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+  const checked = [...document.querySelectorAll('input[name="genres"]:checked')];
+  const msg = document.getElementById('msg');
+
+  if (checked.length === 0) {
+    msg.textContent = "⚠ Please select at least one genre.";
+    msg.style.color = "#b91c1c";
+    return;
+  }
+
+  msg.style.color = "#16a34a";
+  msg.textContent = "✅ Thank you! Your registration is successful.";
+  document.getElementById('bookFairForm').reset();
+}
+</script>
+
+</body>
+</html>
