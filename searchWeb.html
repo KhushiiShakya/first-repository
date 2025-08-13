@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Search Anything</title>
+<style>
+  :root{--bg:#0f172a;--card:#111827;--text:#e5e7eb;--muted:#9ca3af;--brand:#60a5fa}
+  *{box-sizing:border-box} body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;background:radial-gradient(1000px 600px at 10% -10%,rgba(96,165,250,.15),transparent),var(--bg);color:var(--text)}
+  .wrap{max-width:820px;margin:10vh auto;padding:0 16px;text-align:center}
+  h1{font-size:clamp(28px,5vw,48px);margin:0 0 8px}
+  p{color:var(--muted);margin:0 0 24px}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:16px;display:grid;gap:10px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  select, input{background:var(--card);color:var(--text);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:12px}
+  input[type="text"]{flex:1;min-width:260px}
+  button{border:0;border-radius:12px;padding:12px 16px;background:var(--brand);color:#0b1220;font-weight:700;cursor:pointer}
+  .mic{background:#1f2937;color:#e5e7eb}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🔎 Search Anything</h1>
+    <p>Choose an engine, pick a type, type your query, and go!</p>
+
+    <form class="card" id="searchForm">
+      <div class="row">
+        <select id="engine" aria-label="Search engine">
+          <option value="google" selected>Google</option>
+          <option value="bing">Bing</option>
+          <option value="ddg">DuckDuckGo</option>
+          <option value="youtube">YouTube</option>
+          <option value="wikipedia">Wikipedia</option>
+        </select>
+
+        <select id="type" aria-label="Type">
+          <option value="web" selected>Web</option>
+          <option value="images">Images</option>
+          <option value="news">News</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <input id="q" type="text" placeholder="Type your search..." autocomplete="on" required />
+        <button type="submit">Search</button>
+        <button type="button" class="mic" id="micBtn" title="Voice search">🎙︎</button>
+      </div>
+      <div class="hint">Tip: Press Enter to search • Voice works in supported browsers.</div>
+    </form>
+  </div>
+
+<script>
+  const form = document.getElementById('searchForm');
+  const qEl = document.getElementById('q');
+  const engineEl = document.getElementById('engine');
+  const typeEl = document.getElementById('type');
+
+  function buildUrl(engine, type, q){
+    const e = encodeURIComponent(q);
+    switch(engine){
+      case 'google':
+        if(type==='images') return `https://www.google.com/search?tbm=isch&q=${e}`;
+        if(type==='news')   return `https://www.google.com/search?tbm=nws&q=${e}`;
+        return `https://www.google.com/search?q=${e}`;
+      case 'bing':
+        if(type==='images') return `https://www.bing.com/images/search?q=${e}`;
+        if(type==='news')   return `https://www.bing.com/news/search?q=${e}`;
+        return `https://www.bing.com/search?q=${e}`;
+      case 'ddg':
+        if(type==='images') return `https://duckduckgo.com/?q=${e}&iax=images&ia=images`;
+        if(type==='news')   return `https://duckduckgo.com/?q=${e}&iar=news&ia=news`;
+        return `https://duckduckgo.com/?q=${e}`;
+      case 'youtube':
+        return `https://www.youtube.com/results?search_query=${e}`;
+      case 'wikipedia':
+        return `https://en.wikipedia.org/w/index.php?search=${e}`;
+      default:
+        return `https://www.google.com/search?q=${e}`;
+    }
+  }
+
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const url = buildUrl(engineEl.value, typeEl.value, qEl.value.trim());
+    if(!qEl.value.trim()) return;
+    window.open(url, '_blank'); // open results in new tab
+  });
+
+  // Optional: voice search (Chrome/Edge)
+  const micBtn = document.getElementById('micBtn');
+  let recognition;
+  if ('webkitSpeechRecognition' in window) {
+    recognition = new webkitSpeechRecognition();
+    recognition.lang = 'en-US'; // change to 'hi-IN' for Hindi
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    micBtn.addEventListener('click', ()=>{
+      recognition.start();
+      micBtn.textContent = '🎙︎…';
+    });
+    recognition.onresult = (e)=>{
+      const text = e.results[0][0].transcript;
+      qEl.value = text;
+      micBtn.textContent = '🎙︎';
+    };
+    recognition.onend = ()=>{ micBtn.textContent = '🎙︎'; };
+  } else {
+    micBtn.disabled = true;
+    micBtn.title = 'Voice not supported in this browser';
+  }
+</script>
+</body>
+</html>
